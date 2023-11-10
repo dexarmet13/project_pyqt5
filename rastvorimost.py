@@ -1,67 +1,18 @@
-import sys
 import sqlite3
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QDialog, QMessageBox
-from PyQt5.QtGui import QPainter, QColor, QFont, QPalette
-from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from PyQt5.QtCore import Qt
-
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setMinimumSize(1050, 600)
-        self.initUI()
-
-    def initUI(self):
-        self.setWindowTitle('проект')
-        self.setGeometry(100, 100, 800, 600)
-
-        self.label = QLabel("ЭТО ТАБЛИЦА РАСТВОРИМОСТИ\n ЧТОБЫ УВИДЕТЬ ТАБЛИЦУ НАЖМИТЕ НА КНОПКУ", self)
-        self.label.resize(400, 100)
-        self.label.setAlignment(Qt.AlignCenter)
-        self.label.setFont(QFont("Arial", 15))
-        self.label.setStyleSheet("color: white;")
-
-        self.button = QPushButton("ТАБЛИЦА", self)
-        self.button.setFont(QFont("Arial", 14))
-        self.button.setStyleSheet("background-color: #FF1493; color: white;")
-        self.button.setCursor(Qt.PointingHandCursor)
-        self.button.clicked.connect(self.show_rastorimost)
-
-        self.resizeEvent(None)
-
-    def show_rastorimost(self):
-        self.dialog = Rastvorimost(self)
-        self.dialog.show()
-        # self.hide()
-        self.setVisible(True)  # Скрываем начальное окно
-        self.dialog.exec_()
-
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.fillRect(self.rect(), QColor(127, 0, 128))
-
-    def resizeEvent(self, event):
-        label_width = self.width() // 2 + 100
-        label_height = 100
-        label_x = (self.width() - label_width) // 2
-        label_y = (self.height() - label_height) // 2 - 50
-        self.label.setGeometry(label_x, label_y, label_width, label_height)
-
-        button_width = self.width() // 4
-        button_height = 50
-        button_x = (self.width() - button_width) // 2
-        button_y = (self.height() - button_height) // 2 + 50
-        self.button.setGeometry(button_x, button_y, button_width, button_height)
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
+from PyQt5.QtGui import QColor, QPalette
+from PyQt5.QtCore import Qt, QFile
+from PyQt5.QtCore import QUrl
+from PyQt5.QtGui import QDesktopServices
+from dialog_message import Dialog_message
 
 
 class Rastvorimost(QMainWindow):
     def __init__(self, parent):
         super().__init__(parent)
         uic.loadUi('project.ui', self)  # Загружаем дизайн
-        self.main_window = mainWindow
+        self.setWindowTitle('Таблица')
         self.initUI()
         self.setMinimumWidth(800)
         self.setMinimumHeight(600)
@@ -70,9 +21,13 @@ class Rastvorimost(QMainWindow):
 
         self.setPalette(style)
         self.ion_label.setStyleSheet("color: white")
-
-        # self.ion_label.setStyleSheet("background-color: #14c8ff")
         self.solubility_label.setStyleSheet("color: white; border: 1px solid black; padding: 10px;")
+
+        self.actionOpen.triggered.connect(self.open_explorer)
+        self.actionClose.triggered.connect(self.close_project)
+        self.actionInformation_2.triggered.connect(self.show_information)
+        self.actionEdit_Message.triggered.connect(self.Edit_message)
+        # self.actionEdit_Table.triggered.connect(self.Edit_table)
 
     def initUI(self):
         self.lst = ['Mg', 'Ca', 'Ba', 'Cu', 'Al', 'Fe', 'Ag', 'Zn']
@@ -229,6 +184,78 @@ class Rastvorimost(QMainWindow):
         self.btn70.clicked.connect(self.read_data_from_db)
         self.btn71.clicked.connect(self.read_data_from_db)
         self.btn72.clicked.connect(self.read_data_from_db)
+        self.btn1.setCursor(Qt.PointingHandCursor)
+        self.btn2.setCursor(Qt.PointingHandCursor)
+        self.btn3.setCursor(Qt.PointingHandCursor)
+        self.btn4.setCursor(Qt.PointingHandCursor)
+        self.btn5.setCursor(Qt.PointingHandCursor)
+        self.btn6.setCursor(Qt.PointingHandCursor)
+        self.btn7.setCursor(Qt.PointingHandCursor)
+        self.btn8.setCursor(Qt.PointingHandCursor)
+        self.btn9.setCursor(Qt.PointingHandCursor)
+        self.btn10.setCursor(Qt.PointingHandCursor)
+        self.btn11.setCursor(Qt.PointingHandCursor)
+        self.btn12.setCursor(Qt.PointingHandCursor)
+        self.btn13.setCursor(Qt.PointingHandCursor)
+        self.btn14.setCursor(Qt.PointingHandCursor)
+        self.btn15.setCursor(Qt.PointingHandCursor)
+        self.btn16.setCursor(Qt.PointingHandCursor)
+        self.btn17.setCursor(Qt.PointingHandCursor)
+        self.btn18.setCursor(Qt.PointingHandCursor)
+        self.btn19.setCursor(Qt.PointingHandCursor)
+        self.btn20.setCursor(Qt.PointingHandCursor)
+        self.btn21.setCursor(Qt.PointingHandCursor)
+        self.btn22.setCursor(Qt.PointingHandCursor)
+        self.btn23.setCursor(Qt.PointingHandCursor)
+        self.btn24.setCursor(Qt.PointingHandCursor)
+        self.btn25.setCursor(Qt.PointingHandCursor)
+        self.btn26.setCursor(Qt.PointingHandCursor)
+        self.btn27.setCursor(Qt.PointingHandCursor)
+        self.btn28.setCursor(Qt.PointingHandCursor)
+        self.btn29.setCursor(Qt.PointingHandCursor)
+        self.btn30.setCursor(Qt.PointingHandCursor)
+        self.btn31.setCursor(Qt.PointingHandCursor)
+        self.btn32.setCursor(Qt.PointingHandCursor)
+        self.btn33.setCursor(Qt.PointingHandCursor)
+        self.btn34.setCursor(Qt.PointingHandCursor)
+        self.btn35.setCursor(Qt.PointingHandCursor)
+        self.btn36.setCursor(Qt.PointingHandCursor)
+        self.btn37.setCursor(Qt.PointingHandCursor)
+        self.btn38.setCursor(Qt.PointingHandCursor)
+        self.btn39.setCursor(Qt.PointingHandCursor)
+        self.btn40.setCursor(Qt.PointingHandCursor)
+        self.btn41.setCursor(Qt.PointingHandCursor)
+        self.btn42.setCursor(Qt.PointingHandCursor)
+        self.btn43.setCursor(Qt.PointingHandCursor)
+        self.btn44.setCursor(Qt.PointingHandCursor)
+        self.btn45.setCursor(Qt.PointingHandCursor)
+        self.btn46.setCursor(Qt.PointingHandCursor)
+        self.btn47.setCursor(Qt.PointingHandCursor)
+        self.btn48.setCursor(Qt.PointingHandCursor)
+        self.btn49.setCursor(Qt.PointingHandCursor)
+        self.btn50.setCursor(Qt.PointingHandCursor)
+        self.btn51.setCursor(Qt.PointingHandCursor)
+        self.btn52.setCursor(Qt.PointingHandCursor)
+        self.btn53.setCursor(Qt.PointingHandCursor)
+        self.btn54.setCursor(Qt.PointingHandCursor)
+        self.btn55.setCursor(Qt.PointingHandCursor)
+        self.btn56.setCursor(Qt.PointingHandCursor)
+        self.btn57.setCursor(Qt.PointingHandCursor)
+        self.btn58.setCursor(Qt.PointingHandCursor)
+        self.btn59.setCursor(Qt.PointingHandCursor)
+        self.btn60.setCursor(Qt.PointingHandCursor)
+        self.btn61.setCursor(Qt.PointingHandCursor)
+        self.btn62.setCursor(Qt.PointingHandCursor)
+        self.btn63.setCursor(Qt.PointingHandCursor)
+        self.btn64.setCursor(Qt.PointingHandCursor)
+        self.btn65.setCursor(Qt.PointingHandCursor)
+        self.btn66.setCursor(Qt.PointingHandCursor)
+        self.btn67.setCursor(Qt.PointingHandCursor)
+        self.btn68.setCursor(Qt.PointingHandCursor)
+        self.btn69.setCursor(Qt.PointingHandCursor)
+        self.btn70.setCursor(Qt.PointingHandCursor)
+        self.btn71.setCursor(Qt.PointingHandCursor)
+        self.btn72.setCursor(Qt.PointingHandCursor)
 
         self.btn_lst = [getattr(self, f"btn{i}") for i in range(1, 73)]
 
@@ -259,14 +286,31 @@ class Rastvorimost(QMainWindow):
             message_box.setText(data)
             message_box.exec_()
 
+    def open_explorer(self):
+        url = QUrl.fromLocalFile('.')  # Путь к текущей директории
+        QDesktopServices.openUrl(url)
 
-def except_hook(cls, exception, traceback):
-    sys.__excepthook__(cls, exception, traceback)
+    def close_project(self):
+        self.close()
+
+    def read_text_file_contents(self, file_path):
+        file = QFile(file_path)
+        if file.open(QFile.ReadOnly | QFile.Text):
+            text_stream = file.readAll()
+            return str(text_stream, encoding='utf-8')
+        else:
+            QMessageBox.warning(self, 'Error', f'Could not open file: {file.errorString()}')
+
+    def show_information(self):
+        file_path = 'info_menubar.txt'  # Укажите ваш путь к файлу информации
+        contents = self.read_text_file_contents(file_path)
+        if contents:
+            QMessageBox.information(self, 'Information', contents)
+        else:
+            QMessageBox.warning(self, 'Error', 'Could not read file contents.')
+
+    def Edit_message(self):
+        self.dialog_message = Dialog_message()
+        self.dialog_message.exec_()
 
 
-if __name__ == '__main__':
-    sys.excepthook = except_hook
-    app = QApplication(sys.argv)
-    mainWindow = MainWindow()
-    mainWindow.show()
-    sys.exit(app.exec_())
