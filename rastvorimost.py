@@ -2,7 +2,7 @@ import sqlite3
 from PyQt5 import uic
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from PyQt5.QtGui import QColor, QPalette
-from PyQt5.QtCore import Qt, QFile
+from PyQt5.QtCore import Qt, QFile, QObject, pyqtSignal
 from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QDesktopServices
 from dialog_message import Dialog_message
@@ -28,8 +28,11 @@ class Rastvorimost(QMainWindow):
         self.actionInformation_2.triggered.connect(self.show_information)
         self.actionEdit_Message.triggered.connect(self.Edit_message)
         # self.actionEdit_Table.triggered.connect(self.Edit_table)
+        self.dialog_message_run = Dialog_message()
+        # self.dialog_message_run.communicate.sendfromtodialog.connect(self.get_var_dialog_message)
 
     def initUI(self):
+        self.color_message = "background-color: white;"
         self.lst = ['Mg', 'Ca', 'Ba', 'Cu', 'Al', 'Fe', 'Ag', 'Zn']
         self.lst2 = ['CH3COO', 'OH', 'Cl', 'F', 'CO3', 'SO4', 'SiO3', 'PO4', 'SO3']
         self.label.setText("Mg<sup>2+</sup>")
@@ -259,6 +262,8 @@ class Rastvorimost(QMainWindow):
 
         self.btn_lst = [getattr(self, f"btn{i}") for i in range(1, 73)]
 
+    def get_var_dialog_message(self, var):
+        self.color_message = f"background-color: {var};"
     def read_from_db_convert(self, index):
         try:
             self.database_path = "solubility.db"
@@ -281,8 +286,10 @@ class Rastvorimost(QMainWindow):
         self.button_sender = self.sender()
         index = self.btn_lst.index(self.button_sender)
         data = self.read_from_db_convert(index)
+
         if data is not None:
             message_box = QMessageBox()
+            message_box.setStyleSheet(self.color_message)
             message_box.setText(data)
             message_box.exec_()
 
@@ -301,16 +308,15 @@ class Rastvorimost(QMainWindow):
         else:
             QMessageBox.warning(self, 'Error', f'Could not open file: {file.errorString()}')
 
-    def show_information(self):
+    def show_information(self, var):
         file_path = 'info_menubar.txt'  # Укажите ваш путь к файлу информации
         contents = self.read_text_file_contents(file_path)
         if contents:
             QMessageBox.information(self, 'Information', contents)
+
         else:
             QMessageBox.warning(self, 'Error', 'Could not read file contents.')
 
     def Edit_message(self):
-        self.dialog_message = Dialog_message()
-        self.dialog_message.exec_()
 
-
+        self.dialog_message_run.exec_()
